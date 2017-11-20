@@ -6,8 +6,10 @@ import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.psi.util.PsiUtilBase;
 import com.intellij.ui.CollectionListModel;
 import com.jd.plugin.set.FormatSetting;
 
@@ -24,9 +26,14 @@ public class GenerateGSAction extends AnAction {
     public GenerateGSAction() {
     }
 
-    public void actionPerformed(AnActionEvent e) {
+    public void actionPerformed(AnActionEvent anActionEvent) {
+
+        Project project = anActionEvent.getData(PlatformDataKeys.PROJECT);
+        Editor editor = anActionEvent.getData(PlatformDataKeys.EDITOR);
+        PsiFile currentEditorFile = PsiUtilBase.getPsiFileInEditor(editor, project);
+
         this.formatSetting = FormatSetting.getInstance();
-        this.generateGSMethod(this.getPsiMethodFromContext(e));
+        this.generateGSMethod(this.getPsiMethodFromContext(anActionEvent));
     }
 
     private void generateGSMethod(final PsiClass psiMethod) {
